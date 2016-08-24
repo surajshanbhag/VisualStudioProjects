@@ -8,16 +8,14 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 
-
 namespace RadarClass
 {
     class Radar
     {
         //constants
-        private const int Circle_pen_Size = 04;
-        private const int Hand_pen_Size = 02;
-        private const int Point_pen_Size = 02;
-
+        private const int Circle_pen_Size = 01;
+        private const int Hand_pen_Size = 1;
+        private const int Point_pen_Size = 1;
 
         private int form_Size;      // size of form , picture box and image
         private int radar_Size;     // size of the radar
@@ -27,30 +25,32 @@ namespace RadarClass
         private int picLocation_x, picLocation_y;
         private int radarLocation_x, radarLocation_y;   // Location of the Radar
 
-        private Color color_background = Color.White;
-        private Color color_line = Color.Black;
+        private Color color_background = Color.Black;
+        private Color color_line = Color.GreenYellow;
         private Color color_Point = Color.Red;
 
         private static int radar_Count = new int(); // number of objects
         private string radar_name;        // radar_name for the Radar
 
         private int hand_deg;       // degree of the hand
-
+        private int radar_ScanRate;     // milliseconds
         private int[] data_global;
         private int[] data_covered;
         private Timer t;
         private PictureBox radar_PictureBox;
         private Bitmap radar_bmp;
+        private Bitmap radar_BaseImage;
         private Pen radar_pen;
         private Graphics radar_graphics;
         private Form Radar_Form;
-
+        private int count;
         public Radar(string name = "Radar")
         {
             form_Size = 300;      // size of form , picture box and image
             picture_Size = form_Size - 10;
             picLocation_x = 0;
             picLocation_y = 0;
+            radar_ScanRate = 1;
             radar_Size = picture_Size-5;     // size of the radar
             hand_Length = (radar_Size / 2)+1;
             radarLocation_x = radar_Size / 2;
@@ -85,12 +85,13 @@ namespace RadarClass
             picture_Size = size;
             picLocation_x = x;
             picLocation_y = y;
+            radar_ScanRate = 1; //milliseconds
             radar_Size = picture_Size-3;     // size of the radar
             hand_Length = radar_Size / 2;
             radarLocation_x = (radar_Size / 2);
             radarLocation_y = (radar_Size / 2);
-
             t = new Timer();
+
             radar_Count++;
 
             radar_name = name + radar_Count.ToString();
@@ -116,7 +117,17 @@ namespace RadarClass
             radar_PictureBox.BackColor = color_background;
             form.Controls.Add(radar_PictureBox);
             radar_bmp = new Bitmap(picture_Size, picture_Size);
+            radar_BaseImage = new Bitmap(picture_Size, picture_Size);
             radar_PictureBox.Image = radar_bmp;
+            count = 0;
+            Draw_Circle(radarLocation_x, radarLocation_y, radar_Size / 2, true, radar_BaseImage);
+            Draw_Circle(radarLocation_x, radarLocation_y, (int)(0.75 * radar_Size / 2), true, radar_BaseImage);
+            Draw_Circle(radarLocation_x, radarLocation_y, (int)(0.50 * radar_Size / 2), true, radar_BaseImage);
+            Draw_Circle(radarLocation_x, radarLocation_y, (int)(0.25 * radar_Size / 2), true, radar_BaseImage);
+            Draw_Line(0, hand_Length, color_line, radar_BaseImage);
+            Draw_Line(90, hand_Length, color_line, radar_BaseImage);
+            Draw_Line(180, hand_Length, color_line, radar_BaseImage);
+            Draw_Line(270, hand_Length, color_line, radar_BaseImage);
         }
 
         public void add_DataPoint(int deg, int val)
@@ -130,7 +141,7 @@ namespace RadarClass
         }
         public void radarDisplay_start()
         {
-            t.Interval = 5; //in millisecond
+            t.Interval = radar_ScanRate; //in millisecond
             t.Tick += new EventHandler(this.t_Tick);
             t.Start();
         }
@@ -140,52 +151,48 @@ namespace RadarClass
         }
         private void t_Tick(object sender, EventArgs e)
         {
-            //draw circle
-
-            Draw_Circle(radarLocation_x, radarLocation_y, radar_Size / 2);
-            Draw_Circle(radarLocation_x, radarLocation_y, (int)(0.66 * radar_Size / 2));
-            Draw_Circle(radarLocation_x, radarLocation_y, (int)(0.33 * radar_Size / 2));
-
-            Draw_Line(hand_deg, hand_Length);
-            Draw_Line(0, hand_Length);
-            Draw_Line(90, hand_Length);
-            Draw_Line(180, hand_Length);
-            Draw_Line(270, hand_Length);
-
+            Bitmap bmp=new Bitmap(radar_BaseImage);
+            Draw_Line(hand_deg, hand_Length,Color.Aqua, bmp);
             for (int index = 0; index < 360; index++)
             {
-                if (data_covered[index] != 0)
+                if (data_covered[index] != 0 && index != hand_deg)
                 {
-                    Draw_point(index, data_covered[index]);
+                    Draw_point(index, data_covered[index], color_Point, bmp);
                 }
             }
+            Draw_point(hand_deg, data_global[hand_deg], color_Point, bmp);
             data_covered[hand_deg] = data_global[hand_deg];
             //load bitmap in picturebox1
-            radar_PictureBox.Image = radar_bmp;
+            radar_PictureBox.Image = bmp;
 
-            //update
             hand_deg++;
             if (hand_deg == 360)
             {
                 hand_deg = 0;
             }
+
         }
-        public void Draw_Circle(int center_x, int center_y, int radius)
+        public void Draw_Circle(int center_x, int center_y, int radius,bool fill,Bitmap bmp)
         {
             radar_pen = new Pen(color_line, Circle_pen_Size);
-            SolidBrush myBrush = new System.Drawing.SolidBrush(color_background);
-            radar_graphics = Graphics.FromImage(radar_bmp);
+            radar_graphics = Graphics.FromImage(bmp);
+            if (fill)
+            {
+                SolidBrush myBrush = new System.Drawing.SolidBrush(color_background);
+                radar_graphics.FillEllipse(myBrush, center_x - radius, center_y - radius, radius * 2, radius * 2);
+                myBrush.Dispose();
+            }
+
             radar_graphics.DrawEllipse(radar_pen, center_x - radius, center_y - radius, radius * 2, radius * 2);
-            radar_graphics.FillEllipse(myBrush, center_x - radius, center_y - radius, radius * 2, radius * 2);
             radar_graphics.Dispose();
             radar_pen.Dispose();
-            myBrush.Dispose();
         }
-        public void Draw_point(int angle, int distance)
+        public void Draw_point(int angle, int distance,Color colorPoint,Bitmap bmp)
         {
             int radius = 1;
             int center_x = 0;
             int center_y = 0;
+
             if (angle >= 0 && angle <= 180)
             {
                 //right half
@@ -199,9 +206,9 @@ namespace RadarClass
                 center_x = radarLocation_x - (int)(distance * -Math.Sin(Math.PI * angle / 180));
                 center_y = radarLocation_y - (int)(distance * Math.Cos(Math.PI * angle / 180));
             }
-            radar_pen = new Pen(color_Point, Point_pen_Size);
-            SolidBrush myBrush = new System.Drawing.SolidBrush(Color.Green);
-            radar_graphics = Graphics.FromImage(radar_bmp);
+            radar_pen = new Pen(colorPoint, Point_pen_Size);
+            SolidBrush myBrush = new System.Drawing.SolidBrush(colorPoint);
+            radar_graphics = Graphics.FromImage(bmp);
             radar_graphics.DrawEllipse(radar_pen, center_x - radius, center_y - radius, radius * 2, radius * 2);
             radar_graphics.FillEllipse(myBrush, center_x - radius, center_y - radius, radius * 2, radius * 2);
             //Draw_Line(angle, distance);
@@ -209,10 +216,14 @@ namespace RadarClass
             radar_pen.Dispose();
             myBrush.Dispose();
         }
-        public void Draw_Line(int angle, int length)
+        public void Draw_Line(int angle, int length,Color linecolor, Bitmap bmp)
         {
             int x = 0;
             int y = 0;
+            if(angle == -1)
+            {
+                angle = 359;
+            }
             if (angle >= 0 && angle <= 180)
             {
                 //right half
@@ -226,8 +237,8 @@ namespace RadarClass
                 x = radarLocation_x - (int)(length * -Math.Sin(Math.PI * angle / 180));
                 y = radarLocation_y - (int)(length * Math.Cos(Math.PI * angle / 180));
             }
-            radar_pen = new Pen(color_line, Hand_pen_Size);
-            radar_graphics = Graphics.FromImage(radar_bmp);
+            radar_pen = new Pen(linecolor, Hand_pen_Size);
+            radar_graphics = Graphics.FromImage(bmp);
             radar_graphics.DrawLine(radar_pen, new Point(radarLocation_x, radarLocation_y), new Point(x, y));
             radar_graphics.Dispose();
             radar_pen.Dispose();
