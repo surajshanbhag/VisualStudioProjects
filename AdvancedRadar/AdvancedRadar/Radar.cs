@@ -96,29 +96,27 @@ namespace AdvancedRadar
             brush_RadarBackground = new SolidBrush(color_Background);
             brush_Point = new SolidBrush(color_Point);
             pen_Radar = new Pen(Color.GreenYellow, penSz_Circle);
-            draw_Radar(bmp_Radar);
+            draw_Radar(bmp_Radar,true,false);
             form.ResumeLayout();
 
         }
         public void update_Global(Form form, int angle, int value)
         {
             form.SuspendLayout();
-
-            data_Global[angle] = value * length_SweepLine / 100;
-
-            draw_Radar(bmp_Radar);
-            angle_SweepLine = (float)(float)(360 * (float)angle / (float)this.divisions_Angle);
             index_Data = angle;
-            Draw_Line(angle_SweepLine, length_SweepLine, color_SweepLine, bmp_Radar);
+            data_Covered[index_Data] = data_Global[index_Data];
+            data_Global[index_Data] = value * length_SweepLine / 100;
 
-            for (int index = 0; index < divisions_Angle; index++)
+            if (index_Data == 0)
             {
-                if (data_Covered[index] != 0 && index != angle_SweepLine)
-                {
-                    float tempAngle = (float)(float)(360 * (float)index / (float)this.divisions_Angle);
-                    Draw_point(tempAngle, data_Covered[index], color_Point, bmp_Radar, false);
-                }
+                draw_Radar(bmp_Radar, false, false);
             }
+
+            angle_SweepLine = (float)(float)(360 * (float)angle / (float)this.divisions_Angle);
+
+            //Ddraw_Radar(bmp_Radar)raw_Line(angle_SweepLine, length_SweepLine, color_SweepLine, bmp_Radar);
+
+            Draw_point(angle_SweepLine, data_Covered[index_Data], color_Background, bmp_Radar, false);
             Draw_point(angle_SweepLine, data_Global[index_Data], color_Point, bmp_Radar, false);
             data_Covered[index_Data] = data_Global[index_Data];
             //load bitmap in picturebox1
@@ -126,12 +124,12 @@ namespace AdvancedRadar
             form.ResumeLayout();
 
         }
-        public void draw_Radar(Bitmap bmp)
+        public void draw_Radar(Bitmap bmp,bool fill,bool line)
         {
-            Draw_Circle(size_Radar / 2, true, bmp);
-            Draw_Circle((int)(0.75 * size_Radar / 2), true, bmp);
-            Draw_Circle((int)(0.50 * size_Radar / 2), true, bmp);
-            Draw_Circle((int)(0.25 * size_Radar / 2), true, bmp);
+            Draw_Circle(size_Radar / 2, fill, bmp);
+            Draw_Circle((int)(0.75 * size_Radar / 2), fill, bmp);
+            Draw_Circle((int)(0.50 * size_Radar / 2), fill, bmp);
+            Draw_Circle((int)(0.25 * size_Radar / 2), fill, bmp);
             Draw_Line(0, length_SweepLine, color_Line, bmp);
             Draw_Line(90, length_SweepLine, color_Line, bmp);
             Draw_Line(180, length_SweepLine, color_Line, bmp);
@@ -166,10 +164,20 @@ namespace AdvancedRadar
                 center_x = xloc_Radar - (int)(distance * -Math.Sin(Math.PI * angle / 180));
                 center_y = yloc_Radar - (int)(distance * Math.Cos(Math.PI * angle / 180));
             }
-            pen_Radar.Color = color_Point;
-            pen_Radar.Width = penSz_Point;
             graphics_Radar.DrawEllipse(pen_Radar, center_x - radius, center_y - radius, radius * 2, radius * 2);
-            graphics_Radar.FillEllipse(brush_Point, center_x - radius, center_y - radius, radius * 2, radius * 2);
+            if (colorPoint == color_Point)
+            {
+                pen_Radar.Color = color_Point;
+                pen_Radar.Width = penSz_Point;
+                graphics_Radar.FillEllipse(brush_Point, center_x - radius, center_y - radius, radius * 2, radius * 2);
+            }
+            else
+            {
+                pen_Radar.Color = color_Background;
+                pen_Radar.Width = penSz_Point+1;
+                graphics_Radar.FillEllipse(brush_RadarBackground, center_x - radius, center_y - radius, radius * 2, radius * 2);
+            }
+            graphics_Radar.DrawEllipse(pen_Radar, center_x - radius, center_y - radius, radius * 2, radius * 2);
             if (line)
             {
                 Draw_Line(angle, distance, color_Point, bmp);

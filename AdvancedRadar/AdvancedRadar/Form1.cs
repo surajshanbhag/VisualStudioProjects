@@ -32,7 +32,7 @@ namespace AdvancedRadar
             {
                 count = 0;
             }
-            radar.update_Global(this,count, rnd.Next(1, 100));
+                        radar.update_Global(this,count, rnd.Next(1, 100));
             count++;
         }
         private void Form1_Load(object sender, EventArgs e)
