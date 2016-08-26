@@ -55,6 +55,8 @@ namespace AdvancedRadar
         private Pen pen_Radar;
         private Brush brush_RadarBackground;
         private Brush brush_Point;
+        private bool layout_Ongoing;
+        private Timer timer_Display;
         /*-------------------------------------------------------------*/
         public Radar(Form form, int size, int x, int y, int Divisions, string name = "Radar")
         {
@@ -66,7 +68,7 @@ namespace AdvancedRadar
             length_SweepLine = size_Radar / 2;
             xloc_Radar = (size_Radar / 2);
             yloc_Radar = (size_Radar / 2);
-
+            layout_Ongoing = false;
             number_Radar++;
             name_Radar = name + number_Radar.ToString();
 
@@ -98,10 +100,22 @@ namespace AdvancedRadar
             pen_Radar = new Pen(Color.GreenYellow, penSz_Circle);
             draw_Radar(bmp_Radar);
             form.ResumeLayout();
-
+            timer_Display = new Timer();
+            timer_Display.Interval = 1;
+            timer_Display.Tick += new EventHandler(this.timer_Display_Tick);
+            timer_Display.Start();
+        }
+        public void timer_Display_Tick(object sender,EventArgs e)
+        {
+            pictureBox_Radar.Image = bmp_Radar;
+        }
+        public bool isBusy()
+        {
+            return layout_Ongoing;
         }
         public void update_Global(Form form, int angle, int value)
         {
+            layout_Ongoing = true;
             form.SuspendLayout();
             
             data_Global[angle] = value * length_SweepLine / 100;
@@ -122,9 +136,9 @@ namespace AdvancedRadar
             Draw_point(angle_SweepLine, data_Global[index_Data], color_Point, bmp_Radar, false);
             data_Covered[index_Data] = data_Global[index_Data];
             //load bitmap in picturebox1
-            pictureBox_Radar.Image = bmp_Radar;
+            
             form.ResumeLayout();
-
+            layout_Ongoing = false;
         }
         public void draw_Radar(Bitmap bmp)
         {

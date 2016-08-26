@@ -22,7 +22,7 @@ namespace AdvancedRadar
         private ComboBox combo_ListBaudRates;
         private TextBox textBox_Data;
         private GroupBox groupBox_Misc;
-
+        private int divisions;
         Timer t;
         Random rnd;
         int count = 0;
@@ -40,13 +40,16 @@ namespace AdvancedRadar
         public void t_Tick(object sender,EventArgs e)
         {
             
-            if(count == 360)
+            if(count == divisions)
             {
                 count = 0;
             }
             for(int i = 0; i < 6; i++)
             {
-                radar[i].update_Global(this, count, rnd.Next(1, 100));
+                if (!radar[i].isBusy())
+                {
+                    radar[i].update_Global(this, count, rnd.Next(1, 100));
+                }
             }
                         
             count++;
@@ -62,12 +65,13 @@ namespace AdvancedRadar
             int xStart = 436;
             int yStart = 0;
             int size = 200;
-            radar[0] = new Radar(this, size, xStart, yStart, 360, "Lidar");
-            radar[1] = new Radar(this, size, xStart, yStart + size + 5, 360, "Lidar");
-            radar[2] = new Radar(this, size, xStart, yStart + size * 2 + 5, 360, "Lidar");
-            radar[3] = new Radar(this, size, xStart + size + 5, yStart, 360, "Lidar");
-            radar[4] = new Radar(this, size, xStart + size + 5, yStart + size + 5, 360, "Lidar");
-            radar[5] = new Radar(this, size, xStart + size + 5, yStart + size * 2 + 5, 360, "Lidar");
+            divisions = 500;
+            radar[0] = new Radar(this, size, xStart, yStart, divisions, "Lidar");
+            radar[1] = new Radar(this, size, xStart, yStart + size + 5, divisions, "Lidar");
+            radar[2] = new Radar(this, size, xStart, yStart + size * 2 + 5, divisions, "Lidar");
+            radar[3] = new Radar(this, size, xStart + size + 5, yStart, divisions, "Lidar");
+            radar[4] = new Radar(this, size, xStart + size + 5, yStart + size + 5, divisions, "Lidar");
+            radar[5] = new Radar(this, size, xStart + size + 5, yStart + size * 2 + 5, divisions, "Lidar");
 
             this.button_LoadPorts = new System.Windows.Forms.Button();
             this.button_Run = new System.Windows.Forms.Button();
