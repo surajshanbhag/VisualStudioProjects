@@ -28,7 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-           
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.logBox = new System.Windows.Forms.TextBox();
             this.connectButton = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
@@ -46,18 +51,24 @@
             this.ipBox3 = new System.Windows.Forms.TextBox();
             this.ipBox2 = new System.Windows.Forms.TextBox();
             this.ipBox1 = new System.Windows.Forms.TextBox();
-            
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.chart2 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
             this.SuspendLayout();
             // 
             // logBox
             // 
-            this.logBox.Location = new System.Drawing.Point(11, 247);
+            this.logBox.Location = new System.Drawing.Point(12, 227);
             this.logBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.logBox.Multiline = true;
             this.logBox.Name = "logBox";
-            this.logBox.Size = new System.Drawing.Size(377, 544);
+            this.logBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.logBox.Size = new System.Drawing.Size(377, 482);
             this.logBox.TabIndex = 1;
             // 
             // connectButton
@@ -72,7 +83,6 @@
             this.connectButton.TextImageRelation = System.Windows.Forms.TextImageRelation.TextAboveImage;
             this.connectButton.UseVisualStyleBackColor = true;
             this.connectButton.Click += new System.EventHandler(this.connectButton_Click);
-
             // 
             // label2
             // 
@@ -81,7 +91,7 @@
             this.label2.Location = new System.Drawing.Point(15, 208);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(104, 21);
+            this.label2.Size = new System.Drawing.Size(87, 17);
             this.label2.TabIndex = 5;
             this.label2.Text = "Data received";
             // 
@@ -91,7 +101,7 @@
             this.checkBox1.Location = new System.Drawing.Point(8, 23);
             this.checkBox1.Margin = new System.Windows.Forms.Padding(4);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(87, 21);
+            this.checkBox1.Size = new System.Drawing.Size(80, 20);
             this.checkBox1.TabIndex = 6;
             this.checkBox1.Text = "Sensor 1";
             this.checkBox1.UseVisualStyleBackColor = true;
@@ -117,7 +127,7 @@
             this.checkBox4.Location = new System.Drawing.Point(8, 54);
             this.checkBox4.Margin = new System.Windows.Forms.Padding(4);
             this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(87, 21);
+            this.checkBox4.Size = new System.Drawing.Size(80, 20);
             this.checkBox4.TabIndex = 9;
             this.checkBox4.Text = "Sensor 1";
             this.checkBox4.UseVisualStyleBackColor = true;
@@ -128,7 +138,7 @@
             this.checkBox3.Location = new System.Drawing.Point(232, 23);
             this.checkBox3.Margin = new System.Windows.Forms.Padding(4);
             this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(87, 21);
+            this.checkBox3.Size = new System.Drawing.Size(80, 20);
             this.checkBox3.TabIndex = 8;
             this.checkBox3.Text = "Sensor 1";
             this.checkBox3.UseVisualStyleBackColor = true;
@@ -139,7 +149,7 @@
             this.checkBox2.Location = new System.Drawing.Point(120, 23);
             this.checkBox2.Margin = new System.Windows.Forms.Padding(4);
             this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(87, 21);
+            this.checkBox2.Size = new System.Drawing.Size(80, 20);
             this.checkBox2.TabIndex = 7;
             this.checkBox2.Text = "Sensor 1";
             this.checkBox2.UseVisualStyleBackColor = true;
@@ -182,7 +192,7 @@
             this.label3.Location = new System.Drawing.Point(8, 54);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(34, 17);
+            this.label3.Size = new System.Drawing.Size(32, 16);
             this.label3.TabIndex = 10;
             this.label3.Text = "Port";
             // 
@@ -192,7 +202,7 @@
             this.label1.Location = new System.Drawing.Point(23, 28);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(20, 17);
+            this.label1.Size = new System.Drawing.Size(20, 16);
             this.label1.TabIndex = 9;
             this.label1.Text = "IP";
             // 
@@ -244,38 +254,80 @@
             this.ipBox1.TabIndex = 4;
             this.ipBox1.Text = "192";
             this.ipBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.chart2);
+            this.groupBox3.Controls.Add(this.chart1);
+            this.groupBox3.Location = new System.Drawing.Point(406, 15);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(900, 694);
+            this.groupBox3.TabIndex = 9;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Charts";
+            // 
+            // chart1
+            // 
+            chartArea2.Name = "ChartArea2";
+            this.chart1.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend2";
+            this.chart1.Legends.Add(legend2);
+            this.chart1.Location = new System.Drawing.Point(7, 15);
+            this.chart1.Name = "chart2";
+            series2.ChartArea = "ChartArea2";
+            series2.Legend = "Legend2";
+            series2.Name = "Series2";
+            this.chart1.Series.Add(series2);
+            this.chart1.Size = new System.Drawing.Size(887, 330);
+            this.chart1.TabIndex = 0;
+            this.chart1.Text = "chart2";
+            // 
+            // chart2
+            // 
+            chartArea1.Name = "ChartArea1";
+            this.chart2.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.chart2.Legends.Add(legend1);
+            this.chart2.Location = new System.Drawing.Point(7, 351);
+            this.chart2.Name = "chart2";
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.chart2.Series.Add(series1);
+            this.chart2.Size = new System.Drawing.Size(887, 330);
+            this.chart2.TabIndex = 1;
+            this.chart2.Text = "chart2";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1542, 802);
+            this.ClientSize = new System.Drawing.Size(1309, 712);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.logBox);
-
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Form1";
             this.Text = "Form1";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
-
-
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            //this.ResumeLayout(false);
-            //this.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart2)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
         private System.Windows.Forms.TextBox logBox;
         private System.Windows.Forms.Button connectButton;
-        private System.Windows.Forms.DataVisualization.Charting.Chart chart_temp;
         private System.Windows.Forms.CheckBox checkBox4;
         private System.Windows.Forms.CheckBox checkBox3;
         private System.Windows.Forms.CheckBox checkBox2;
@@ -296,7 +348,9 @@
         private System.Windows.Forms.Label label1;
 
         private System.Windows.Forms.Button startpauseButton;
-        private System.Windows.Forms.DataVisualization.Charting.Chart[] chart;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chart2;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
     }
 }
 

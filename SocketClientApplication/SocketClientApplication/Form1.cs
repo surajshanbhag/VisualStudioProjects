@@ -27,57 +27,6 @@ namespace SocketClientApplication
         public Form1()
         {
             InitializeComponent();
-            this.SuspendLayout();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea[] chartArea = new System.Windows.Forms.DataVisualization.Charting.ChartArea[4];
-            System.Windows.Forms.DataVisualization.Charting.Legend[] legend = new System.Windows.Forms.DataVisualization.Charting.Legend[4];
-            System.Windows.Forms.DataVisualization.Charting.Series[] series = new System.Windows.Forms.DataVisualization.Charting.Series[4];
-            System.Windows.Forms.DataVisualization.Charting.Title[] title = new System.Windows.Forms.DataVisualization.Charting.Title[4];
-            this.chart = new System.Windows.Forms.DataVisualization.Charting.Chart[4];
-            string[] chartNames = { "Acceleration", "Pulse", "Temperature", "EMG" };
-            for (int i = 0; i < 4; i++)
-            {
-                chartArea[i] = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-                legend[i] = new System.Windows.Forms.DataVisualization.Charting.Legend();
-                series[i] = new System.Windows.Forms.DataVisualization.Charting.Series();
-                title[i] = new System.Windows.Forms.DataVisualization.Charting.Title();
-                chart[i] = new System.Windows.Forms.DataVisualization.Charting.Chart();
-                ((System.ComponentModel.ISupportInitialize)(this.chart[i])).BeginInit();
-            }
-            // 
-            // chart_temp
-            // 
-            for (int i = 0; i < 4; i++)
-            {
-                chartArea[i].Name = "chartArea_" + i.ToString();
-                this.chart[i].ChartAreas.Add(chartArea[i]);
-                legend[i].Enabled = false;
-                legend[i].Name = "legend_" + i.ToString();
-                this.chart[i].Legends.Add(legend[i]);
-                this.chart[i].Location = new System.Drawing.Point(397, 15 + i * 198);
-                this.chart[i].Margin = new System.Windows.Forms.Padding(4);
-                this.chart[i].Name = "chart_" + i.ToString();
-                series[i].ChartArea = "chartArea_" + i.ToString();
-                series[i].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
-                series[i].Legend = "legend_" + i.ToString();
-                series[i].Name = "series_" + i.ToString();
-                this.chart[i].Series.Add(series[i]);
-                this.chart[i].Size = new System.Drawing.Size(1137, 189);
-                this.chart[i].TabIndex = 4;
-                this.chart[i].Text = "chart_" + i.ToString();
-                title[i].Name = chartNames[i];
-                this.chart[i].Titles.Add(title[i]);
-                this.chart[i].ChartAreas[0].AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.DashDotDot;
-            }
-            for (int i = 0; i < 4; i++)
-            {
-                this.Controls.Add(this.chart[i]);
-            }
-            for (int i = 0; i < 4; i++)
-            {
-                ((System.ComponentModel.ISupportInitialize)(this.chart[i])).EndInit();
-            }
-            this.ResumeLayout(false);
-            this.PerformLayout();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -117,7 +66,7 @@ namespace SocketClientApplication
                         //this.chart1.Series["Series1"].Points.Add(array);
                         //this.chart1.Series["Series1"].Points.AddXY(requestCount, Convert.ToInt32(dataFromClient));
                         AddDataPoint(result);
-                        AppendChart(requestCount, result[1]);
+                        AppendChart(requestCount, result[0]);
                         AppendTextBox(dataFromClient);
                     }
                     catch (Exception ex)
@@ -155,8 +104,8 @@ namespace SocketClientApplication
             {
                 try
                 {
-                    chart[0].Series["series_0"].Points.AddXY(index, Convert.ToDouble(value));
-                    chart[0].Update();
+                    chart1.Series["series1"].Points.AddXY(index, Convert.ToInt32(value));
+                    chart1.Update();
                 }
                 catch (Exception ez)
                 {
