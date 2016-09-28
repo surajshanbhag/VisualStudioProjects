@@ -20,13 +20,12 @@ namespace SocketPlot
             public double[] data;
             public sensorData(int a)
             {
-                data = new double[4];
+                data = new double[6];
             }
         };
         List<sensorData> sensor_2;
         System.Net.Sockets.TcpClient clientSocket = new System.Net.Sockets.TcpClient();
         System.Threading.Thread socketThread;
-        double[] sensor_Last500;
         int sensor_1_index = 0;
         int sensor_1_last = 0;
         Boolean Connected = false;
@@ -36,7 +35,12 @@ namespace SocketPlot
         const int temperature_index = 0;
         const int pulse_index = 1;
         const int emg_index = 2;
-        const int acceleration_index = 3;
+        const int acceleration_x = 3;
+        const int acceleration_y = 4;
+        const int acceleration_z = 5;
+
+        int NumPoints;
+        Boolean threadRunning = true;
         public Form1()
         {
             InitializeComponent();
@@ -45,17 +49,15 @@ namespace SocketPlot
         private void Form1_Load(object sender, EventArgs e)
         {
             sensor_2 = new List<sensorData>();
-            sensor_Last500 = new double[500];
-            socketThread = new System.Threading.Thread(DoThisAllTheTime);
             sw = new Stopwatch();
-            socketThread.Start();
+            NumPoints = 500;
             //sw.Start();
         }
         public void DoThisAllTheTime()
         {
             MethodInvoker mi = delegate () { this.Text = DateTime.Now.ToString(); };
             this.Invoke(mi);
-            while (true)
+            while (threadRunning)
             {
                 //you need to use Invoke because the new thread can't access the UI elements directly
 
@@ -81,20 +83,35 @@ namespace SocketPlot
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            ip = ipBox1.Text + "." + ipBox2.Text + "." + ipBox3.Text + "." + ipBox4.Text;
-            portNum = Convert.ToInt32(portBox.Text);
-            if (ip != null)
+            if (button1.Text == "Connect")
             {
-                try
+                ip = ipBox1.Text + "." + ipBox2.Text + "." + ipBox3.Text + "." + ipBox4.Text;
+                portNum = Convert.ToInt32(portBox.Text);
+                if (ip != null)
                 {
-                    clientSocket.Connect(ip, portNum);
-                    Connected = true;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
+                    try
+                    {
+                        clientSocket.Connect(ip, portNum);
+                        Connected = true;
+                        threadRunning = true;
+                        socketThread = new System.Threading.Thread(DoThisAllTheTime);
+                        socketThread.Start();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.ToString());
 
+                    }
                 }
+                button1.Text = "Dis-connect";
+            }
+            else
+            {
+                threadRunning = false;
+                Connected = false;
+                clientSocket.GetStream().Close();
+                clientSocket.Close();
+                button1.Text = "Connect";
             }
         }
 
@@ -114,39 +131,49 @@ namespace SocketPlot
 
         private void chartRefreshTimer(object sender, EventArgs e)
         {
+            List<double> sensor_DisplayPoints = new List<double>();
             chart4.Series["Temperature"].Points.Clear();
             chart3.Series["EMG"].Points.Clear();
-            chart2.Series["Acceleration"].Points.Clear();
+            chart2.Series["Acceleration_x"].Points.Clear();
+            chart2.Series["Acceleration_y"].Points.Clear();
+            chart2.Series["Acceleration_z"].Points.Clear();
             chart1.Series["Pulse"].Points.Clear();
-            for (int count = 0; count < 4; count++)
+            for (int count = 0; count < 6; count++)
             {
-                for (int i = 0; i < 500; i++)
+                sensor_DisplayPoints.Clear();
+                for (int i = 0; i < NumPoints; i++)
                 {
                     if (i < sensor_2.Count)
                     {
-                        sensor_Last500[sensor_Last500.Length - i - 1] = sensor_2[sensor_2.Count - 1 - i].data[count];
+                        sensor_DisplayPoints.Insert(0,sensor_2[sensor_2.Count - 1 - i].data[count]);
                     }
                     else
                     {
-                        sensor_Last500[sensor_Last500.Length - i - 1] = 0;
+                        sensor_DisplayPoints.Insert(0, 0);
                     }
 
                 }
-                for (int i = 0; i < 500; i++)
+                for (int i = 0; i < NumPoints; i++)
                 {
                     switch (count)
                     {
                         case temperature_index:
-                            chart4.Series["Temperature"].Points.AddXY(i, sensor_Last500[i]);
+                            chart4.Series["Temperature"].Points.AddXY(i, sensor_DisplayPoints[i]);
                             break;
                         case emg_index:
-                            chart3.Series["EMG"].Points.AddXY(i, sensor_Last500[i]);
-                            break;
-                        case acceleration_index:
-                            chart2.Series["Acceleration"].Points.AddXY(i, sensor_Last500[i]);
+                            chart3.Series["EMG"].Points.AddXY(i, sensor_DisplayPoints[i]);
                             break;
                         case pulse_index:
-                            chart1.Series["Pulse"].Points.AddXY(i, sensor_Last500[i]);
+                            chart1.Series["Pulse"].Points.AddXY(i, sensor_DisplayPoints[i]);
+                            break;
+                        case acceleration_x:
+                            chart2.Series["Acceleration_x"].Points.AddXY(i, sensor_DisplayPoints[i]);
+                            break;
+                        case acceleration_y:
+                            chart2.Series["Acceleration_y"].Points.AddXY(i, sensor_DisplayPoints[i]);
+                            break;
+                        case acceleration_z:
+                            chart2.Series["Acceleration_z"].Points.AddXY(i, sensor_DisplayPoints[i]);
                             break;
                     }
                     
@@ -161,7 +188,9 @@ namespace SocketPlot
             newData.data[temperature_index] = Convert.ToDouble(data[temperature_index]);
             newData.data[pulse_index] = Convert.ToDouble(data[pulse_index]);
             newData.data[emg_index] = Convert.ToDouble(data[emg_index]);
-            newData.data[acceleration_index] = Convert.ToDouble(data[acceleration_index]);
+            newData.data[acceleration_x] = Convert.ToDouble(data[acceleration_x]);
+            newData.data[acceleration_y] = Convert.ToDouble(data[acceleration_y]);
+            newData.data[acceleration_z] = Convert.ToDouble(data[acceleration_z]);
             sensor_2.Add(newData);
             sw.Stop();
             //long microseconds = sw.ElapsedTicks / (Stopwatch.Frequency / (1000L * 1000L));
@@ -196,6 +225,7 @@ namespace SocketPlot
                 return;
             }
             toolStripStatusLabel1.Text = value;
+            toolStripStatusLabel2.Text = (DateTime.Now - Process.GetCurrentProcess().StartTime).ToString();
             statusStrip1.Refresh();
         }
         public void AppendTextBox(string value)
@@ -207,6 +237,61 @@ namespace SocketPlot
             }
             textBox6.AppendText(value);
             textBox6.AppendText(Environment.NewLine);
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            NumPoints = 500 + 500;
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            if (NumPoints > 50)
+                NumPoints -= 50;
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            threadRunning = false;
+            Connected = false;
+            clientSocket.GetStream().Close();
+            clientSocket.Close();
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if(checkBox1.Checked == true)
+            {
+                chart2.Series["Acceleration_x"].Enabled = true;
+            }
+            else
+            {
+                chart2.Series["Acceleration_x"].Enabled = false;
+            }
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox2.Checked == true)
+            {
+                chart2.Series["Acceleration_y"].Enabled = true;
+            }
+            else
+            {
+                chart2.Series["Acceleration_y"].Enabled = false;
+            }
+        }
+
+        private void checkBox3_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox3.Checked == true)
+            {
+                chart2.Series["Acceleration_z"].Enabled = true;
+            }
+            else
+            {
+                chart2.Series["Acceleration_z"].Enabled = false;
+            }
         }
     }
 }
