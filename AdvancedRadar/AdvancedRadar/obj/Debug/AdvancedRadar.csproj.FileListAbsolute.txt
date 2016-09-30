@@ -1,0 +1,9 @@
+E:\GIT\VisualStudioProjects\AdvancedRadar\AdvancedRadar\bin\Debug\AdvancedRadar.exe.config
+E:\GIT\VisualStudioProjects\AdvancedRadar\AdvancedRadar\bin\Debug\AdvancedRadar.exe
+E:\GIT\VisualStudioProjects\AdvancedRadar\AdvancedRadar\bin\Debug\AdvancedRadar.pdb
+E:\GIT\VisualStudioProjects\AdvancedRadar\AdvancedRadar\obj\Debug\AdvancedRadar.csprojResolveAssemblyReference.cache
+E:\GIT\VisualStudioProjects\AdvancedRadar\AdvancedRadar\obj\Debug\AdvancedRadar.Form1.resources
+E:\GIT\VisualStudioProjects\AdvancedRadar\AdvancedRadar\obj\Debug\AdvancedRadar.Properties.Resources.resources
+E:\GIT\VisualStudioProjects\AdvancedRadar\AdvancedRadar\obj\Debug\AdvancedRadar.csproj.GenerateResource.Cache
+E:\GIT\VisualStudioProjects\AdvancedRadar\AdvancedRadar\obj\Debug\AdvancedRadar.exe
+E:\GIT\VisualStudioProjects\AdvancedRadar\AdvancedRadar\obj\Debug\AdvancedRadar.pdb

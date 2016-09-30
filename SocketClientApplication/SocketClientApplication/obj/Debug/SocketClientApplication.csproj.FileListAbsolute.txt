@@ -1,0 +1,9 @@
+E:\GIT\VisualStudioProjects\SocketClientApplication\SocketClientApplication\bin\Debug\SocketClientApplication.exe.config
+E:\GIT\VisualStudioProjects\SocketClientApplication\SocketClientApplication\bin\Debug\SocketClientApplication.exe
+E:\GIT\VisualStudioProjects\SocketClientApplication\SocketClientApplication\bin\Debug\SocketClientApplication.pdb
+E:\GIT\VisualStudioProjects\SocketClientApplication\SocketClientApplication\obj\Debug\SocketClientApplication.csprojResolveAssemblyReference.cache
+E:\GIT\VisualStudioProjects\SocketClientApplication\SocketClientApplication\obj\Debug\SocketClientApplication.Form1.resources
+E:\GIT\VisualStudioProjects\SocketClientApplication\SocketClientApplication\obj\Debug\SocketClientApplication.Properties.Resources.resources
+E:\GIT\VisualStudioProjects\SocketClientApplication\SocketClientApplication\obj\Debug\SocketClientApplication.csproj.GenerateResource.Cache
+E:\GIT\VisualStudioProjects\SocketClientApplication\SocketClientApplication\obj\Debug\SocketClientApplication.exe
+E:\GIT\VisualStudioProjects\SocketClientApplication\SocketClientApplication\obj\Debug\SocketClientApplication.pdb

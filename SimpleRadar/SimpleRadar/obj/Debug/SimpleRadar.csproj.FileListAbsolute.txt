@@ -1,0 +1,9 @@
+E:\GIT\VisualStudioProjects\SimpleRadar\SimpleRadar\bin\Debug\SimpleRadar.exe.config
+E:\GIT\VisualStudioProjects\SimpleRadar\SimpleRadar\obj\Debug\SimpleRadar.csprojResolveAssemblyReference.cache
+E:\GIT\VisualStudioProjects\SimpleRadar\SimpleRadar\obj\Debug\SimpleRadar.Form1.resources
+E:\GIT\VisualStudioProjects\SimpleRadar\SimpleRadar\obj\Debug\SimpleRadar.Properties.Resources.resources
+E:\GIT\VisualStudioProjects\SimpleRadar\SimpleRadar\obj\Debug\SimpleRadar.csproj.GenerateResource.Cache
+E:\GIT\VisualStudioProjects\SimpleRadar\SimpleRadar\bin\Debug\SimpleRadar.exe
+E:\GIT\VisualStudioProjects\SimpleRadar\SimpleRadar\bin\Debug\SimpleRadar.pdb
+E:\GIT\VisualStudioProjects\SimpleRadar\SimpleRadar\obj\Debug\SimpleRadar.exe
+E:\GIT\VisualStudioProjects\SimpleRadar\SimpleRadar\obj\Debug\SimpleRadar.pdb
