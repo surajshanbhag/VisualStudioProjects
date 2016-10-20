@@ -261,14 +261,6 @@ namespace SocketPlot_2
                 NumPoints -= 50;
         }
 
-        private void button5_Click(object sender, EventArgs e)
-        {
-            threadRunning = false;
-            Connected = false;
-            clientSocket.GetStream().Close();
-            clientSocket.Close();
-        }
-
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             if(checkBox1.Checked == true)

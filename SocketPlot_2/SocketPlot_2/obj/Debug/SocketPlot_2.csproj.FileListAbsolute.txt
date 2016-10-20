@@ -6,3 +6,4 @@ E:\GIT\VisualStudioProjects\SocketPlot_2\SocketPlot_2\bin\Debug\SocketPlot_2.pdb
 E:\GIT\VisualStudioProjects\SocketPlot_2\SocketPlot_2\obj\Debug\SocketPlot_2.Form1.resources
 E:\GIT\VisualStudioProjects\SocketPlot_2\SocketPlot_2\obj\Debug\SocketPlot_2.exe
 E:\GIT\VisualStudioProjects\SocketPlot_2\SocketPlot_2\obj\Debug\SocketPlot_2.pdb
+E:\GIT\VisualStudioProjects\SocketPlot_2\SocketPlot_2\obj\Debug\SocketPlot_2.csprojResolveAssemblyReference.cache
